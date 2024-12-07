@@ -107,44 +107,45 @@ export const assignedTask = async (req, res, next) => {
 
 
 
-export const getTasks = async (req, res, next) => {
-  try {
+export const getTasks =  (req, res, next) => {
+  // try {
+    res.status(200).json("welcome fawad on task route");
     // Extract query parameters
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 3;
-    const status = req.query.status; 
+    // const page = parseInt(req.query.page, 10) || 1;
+    // const limit = parseInt(req.query.limit, 10) || 3;
+    // const status = req.query.status; 
 
-    // Validate input
-    if (page <= 0 || limit <= 0) {
-      return next(createError(400, "Page and limit must be positive integers!"));
-    }
+    // // Validate input
+    // if (page <= 0 || limit <= 0) {
+    //   return next(createError(400, "Page and limit must be positive integers!"));
+    // }
 
-    const skip = (page - 1) * limit;
+    // const skip = (page - 1) * limit;
 
    
-    const filter = {};
-    if (status) {
-      filter.status = status; 
-    }
+    // const filter = {};
+    // if (status) {
+    //   filter.status = status; 
+    // }
 
-    const totalTasks = await Task.countDocuments(filter);
-    if (totalTasks === 0) {
-      return res.status(200).json({});
-    }
-    const tasks = await Task.find(filter)
-      .populate("assignee", "username email img")
-      .skip(skip)
-      .limit(limit);
+    // const totalTasks = await Task.countDocuments(filter);
+    // if (totalTasks === 0) {
+    //   return res.status(200).json({});
+    // }
+    // const tasks = await Task.find(filter)
+    //   .populate("assignee", "username email img")
+    //   .skip(skip)
+    //   .limit(limit);
 
-    res.status(200).json({
-      totalTasks, // Total number of matching records
-      currentPage: page, // Current page number
-      totalPages: Math.ceil(totalTasks / limit), // Total pages
-      tasks, // Array of retrieved tasks
-    });
-  } catch (err) {
-    next(err);
-  }
+    // res.status(200).json({
+    //   totalTasks, // Total number of matching records
+    //   currentPage: page, // Current page number
+    //   totalPages: Math.ceil(totalTasks / limit), // Total pages
+    //   tasks, // Array of retrieved tasks
+    //});
+  // } catch (err) {
+  //   next(err);
+  // }
 };
 
 
