@@ -107,8 +107,8 @@ export const assignedTask = async (req, res, next) => {
 
 
 
-export const getTasks = async (req, res, next) => {
-  try {
+export const getTasks =  (req, res, next) => {
+  // try {
     res.status(200).json("welcome fawad on task route");
     // Extract query parameters
     // const page = parseInt(req.query.page, 10) || 1;
@@ -143,9 +143,9 @@ export const getTasks = async (req, res, next) => {
     //   totalPages: Math.ceil(totalTasks / limit), // Total pages
     //   tasks, // Array of retrieved tasks
     //});
-  } catch (err) {
-    next(err);
-  }
+  // } catch (err) {
+  //   next(err);
+  // }
 };
 
 
