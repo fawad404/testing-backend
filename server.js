@@ -34,10 +34,11 @@ const connectMongodb = async () => {
 // Middleware for CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://affliate-work-site.vercel.app/"],
-    credentials: true,
+    origin: true,  // Allow all origins
+    credentials: true, // If you need to include cookies or authentication
   })
 );
+
 
 // Parse JSON and cookies
 app.use(express.json());
