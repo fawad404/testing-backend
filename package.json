@@ -4,7 +4,7 @@
   "description": "Node.js backend for deployment on Vercel",
   "main": "server.js",
   "engines": {
-    "node" : "14.x"
+    "node" : "22.x"
   },
   "type": "module",
   "scripts": {
