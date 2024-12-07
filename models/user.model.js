@@ -62,6 +62,11 @@ const userSchema = new Schema(
       required: false,
       
     },
+    liveSelfie:{
+      type: String,
+      required: false,
+
+    },
     bankImg: {
       type: String,
       required: false,

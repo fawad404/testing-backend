@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoute from "./routes/user.route.js";
+import taskRoute from "./routes/task.route.js";
+import submitedTaskRoute from "./routes/submitedTask.route.js";
 import gigRoute from "./routes/gig.route.js";
 import orderRoute from "./routes/order.route.js";
 import converstionRoute from "./routes/conversation.route.js";
@@ -29,7 +31,7 @@ const connectMongodb = async () => {
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://fiverr-web.netlify.app"],
+    origin: ["http://localhost:5173", "https://affliate-work-site.vercel.app/"],
     credentials: true,
   })
 );
@@ -48,6 +50,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
+app.use("/api/task", taskRoute);
+app.use("/api/submitedTask", submitedTaskRoute);
 app.use("/api/gigs", gigRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/conversation", converstionRoute);
