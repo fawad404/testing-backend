@@ -61,6 +61,7 @@ export const assignedTask = async (req, res, next) => {
     // Extract query parameters
     const page = parseInt(req.query.page, 10) || 1; // Default to page 1
     const limit = parseInt(req.query.limit, 10) || 3; // Default limit of 3
+    const status = req.query.status; // Extract the status query parameter
 
     // Validate page and limit values
     if (page <= 0 || limit <= 0) {
@@ -69,21 +70,20 @@ export const assignedTask = async (req, res, next) => {
 
     const skip = (page - 1) * limit;
 
-    // Get the total count of tasks assigned to the specified user
-    const assigneeId = req.params.id; // User ID from request params
-    const totalTasks = await Task.countDocuments({ assignee: assigneeId });
+    // Build the filter object
+    let filter = { assignee: req.params.id }; // Basic filter for assignee ID
+    if (status) {
+      filter.status = status; // Add status filter if present
+    }
 
-    // Fetch paginated tasks assigned to the user
-    const tasks = await Task.find({ assignee: assigneeId })
+    // Get the total count of tasks matching the filter
+    const totalTasks = await Task.countDocuments(filter);
+
+    // Fetch paginated tasks matching the filter
+    const tasks = await Task.find(filter)
       .populate("assignee", "username email img") // Populate assignee details
       .skip(skip)
       .limit(limit);
-
-    // Debugging logs for visibility
-    // console.log("Total Assigned Tasks:", totalTasks);
-    // console.log("Assignee ID:", assigneeId);
-    // console.log("Skip:", skip, "Limit:", limit, "Page:", page);
-    // console.log("Tasks Retrieved:", tasks.length);
 
     // Handle case where no tasks are found
     if (!tasks || tasks.length === 0) {
@@ -102,6 +102,7 @@ export const assignedTask = async (req, res, next) => {
     next(err);
   }
 };
+
 
 
 
@@ -128,7 +129,7 @@ export const getTasks = async (req, res, next) => {
 
     const totalTasks = await Task.countDocuments(filter);
     if (totalTasks === 0) {
-      return next(createError(404, "No tasks available with the specified criteria!"));
+      return res.status(200).json({});
     }
     const tasks = await Task.find(filter)
       .populate("assignee", "username email img")
