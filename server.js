@@ -36,8 +36,8 @@ connectMongodb();
 // Middleware for CORS
 app.use(
   cors({
-    origin: true,  // Allow all origins
-    credentials: true, // If you need to include cookies or authentication
+    origin: ["http://localhost:5173", "https://affliate-work-site.vercel.app/"],
+    credentials: true,
   })
 );
 

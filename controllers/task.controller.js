@@ -2,21 +2,40 @@ import taskModel from "../models/task.model.js";
 import Task from "../models/task.model.js";
 import userModel from "../models/user.model.js";
 import createError from "../utils/createError.js";
+import { sendEmail } from "./emailUtilis.js";
 
 export const postTask = async (req, res, next) => {
-
   const newTask = new taskModel({
     taskId: req.taskId,
     ...req.body,
   });
 
   try {
+    // Save the new task
     const savedTask = await newTask.save();
+
+    // Populate the 'assignee' field with 'username', 'email', and 'img'
+    const populatedTask = await taskModel
+      .findById(savedTask._id)
+      .populate("assignee", "username email img");  // Populate assignee's details
+
+    // Extract the email of the assignee from the populated task
+    const email = populatedTask.assignee.email;  // Access the populated 'assignee' object
+    const subject = "New Task Assigned";
+    const message = `
+      <h1>You have been assigned a new task</h1>
+      <p><a href="http://localhost:5173/dashboard/tasks/${savedTask._id}">Click here to see the task!</a></p>
+    `;
+
+    // Send the email to the assignee
+    await sendEmail(email, subject, message);
+    
+    // Return the saved task as a response
     res.status(201).json(savedTask);
   } catch (err) {
     next(err);
   }
-}
+};
 
 export const deleteTask = async (req, res, next) => {
   const task = await Task.findById(req.params.id);
@@ -83,7 +102,8 @@ export const assignedTask = async (req, res, next) => {
     const tasks = await Task.find(filter)
       .populate("assignee", "username email img") // Populate assignee details
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ createdAt: -1 });  // Sort by creation date in descending order
 
     // Handle case where no tasks are found
     if (!tasks || tasks.length === 0) {
@@ -134,7 +154,8 @@ export const getTasks = async (req, res, next) => {
     const tasks = await Task.find(filter)
       .populate("assignee", "username email img")
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ createdAt: -1 });  // Sort by creation date in descending order
 
     res.status(200).json({
       totalTasks, // Total number of matching records
