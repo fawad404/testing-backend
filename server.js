@@ -44,6 +44,9 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.status(200).json("welcome fawad on main route");
+  )};
 // Routes
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
