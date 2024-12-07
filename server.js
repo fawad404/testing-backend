@@ -1,19 +1,18 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import userRoute from "./routes/user.route.js";
-import taskRoute from "./routes/task.route.js";
-import submitedTaskRoute from "./routes/submitedTask.route.js";
-import gigRoute from "./routes/gig.route.js";
-import orderRoute from "./routes/order.route.js";
-import converstionRoute from "./routes/conversation.route.js";
-import messageRoute from "./routes/message.route.js";
-import reviewRoute from "./routes/review.route.js";
-import authRoute from "./routes/auth.route.js";
-import cookieParser from "cookie-parser";
-import cors from "cors";
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import userRoute from './routes/user.route.js';
+import taskRoute from './routes/task.route.js';
+import submitedTaskRoute from './routes/submitedTask.route.js';
+import gigRoute from './routes/gig.route.js';
+import orderRoute from './routes/order.route.js';
+import converstionRoute from './routes/conversation.route.js';
+import messageRoute from './routes/message.route.js';
+import reviewRoute from './routes/review.route.js';
+import authRoute from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
-// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
@@ -21,15 +20,18 @@ const app = express();
 // MongoDB connection
 const connectMongodb = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {  // Use environment variable for the URI
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to MongoDB successfully!");
+    console.log('Connected to MongoDB successfully!');
   } catch (error) {
-    console.error("MongoDB connection error:", error);
+    console.error('MongoDB connection error:', error);
   }
 };
+
+// Connect MongoDB once when the app starts
+connectMongodb();
 
 // Middleware for CORS
 app.use(
@@ -39,15 +41,19 @@ app.use(
   })
 );
 
+app.get("/", (req, res) => {
+  res.status(200).json("welcome fawad on main route");
+});
 
-// Parse JSON and cookies
+// Middleware to parse JSON and cookies
 app.use(express.json());
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.status(200).json("welcome fawad on main route");
 });
-// Routes
+
+// Define routes
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/task", taskRoute);
@@ -65,9 +71,5 @@ app.use((err, req, res, next) => {
   return res.status(errorStatus).send(errorMessage);
 });
 
-// Listen on dynamic port for Vercel
-const PORT = process.env.PORT || 8000; // Default to 8000 for local development
-app.listen(PORT, () => {
-  connectMongodb();
-  console.log(`Server running on port ${PORT}`);
-});
+// Export app for Vercel serverless function
+export default app;
