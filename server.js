@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
   res.status(200).json("welcome fawad on main route");
 });
 
-// Define routes
+
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/task", taskRoute);
