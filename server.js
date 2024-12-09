@@ -36,14 +36,29 @@ connectMongodb();
 // Middleware for CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://affliate-work-site.vercel.app/"],
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://affliate-work-site.vercel.app"
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin); // Allow this origin
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
+// Handle preflight requests
+app.options("*", cors());
+
+// Default route (remove duplicates)
 app.get("/", (req, res) => {
-  res.status(200).json("welcome fawad on main route");
+  res.status(200).json("Welcome Fawad on main route");
 });
+
 
 // Middleware to parse JSON and cookies
 app.use(express.json());
