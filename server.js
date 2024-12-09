@@ -71,5 +71,5 @@ app.use((err, req, res, next) => {
   return res.status(errorStatus).send(errorMessage);
 });
 
-// Export app for Vercel serverless function
+
 export default app;
