@@ -36,7 +36,7 @@ connectMongodb();
 // Middleware for CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://affliate-work-site.vercel.app/"],
+    origin: ["http://localhost:5173", "https://https://www.expertsync.co.uk/"],
     credentials: true,
   })
 );
