@@ -34,7 +34,12 @@ const connectMongodb = async () => {
 connectMongodb();
 
 // Middleware for CORS
-app.use(cors());
+const corsOptions = {
+  origin: "https://www.expertsync.co.uk", // Replace with your frontend's domain
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+};
+
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.status(200).json("welcome fawad on main route");
