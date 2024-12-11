@@ -4,6 +4,8 @@ import userModel from "../models/user.model.js";
 import createError from "../utils/createError.js";
 import { sendEmail } from "./emailUtilis.js";
 
+let adminEmail = "fawadanxari31@gmail.com";
+
 export const postTask = async (req, res, next) => {
   const newTask = new taskModel({
     taskId: req.taskId,
@@ -42,6 +44,15 @@ export const deleteTask = async (req, res, next) => {
   if (req.params.id !== task._id.toString()) {
     return next(createError(403, "You can delete only your account!"));
   }
+  const email = adminEmail;  // Access the populated 'assignee' object
+  const subject = "Task Deleted!";
+  const message = `
+  <h1>You have deleted task name</h1>
+  `;
+  
+  // Send the email to the assignee
+  await sendEmail(email, subject, message);
+
   await Task.findByIdAndDelete(req.params.id);
   res.status(200).send("Deleted Sucessfully.");
 };
