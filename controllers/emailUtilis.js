@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 // Function to send email
 export async function sendEmail(to, subject, message) {
   const mailOptions = {
-    from: '"Prebid House" <mrrobot34404@gmail.com>',
+    from: '"ExpertSync" <mrrobot34404@gmail.com>',
     to, // Single email recipient
     subject,
     html: message, // HTML message
