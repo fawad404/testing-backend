@@ -73,7 +73,11 @@ const userSchema = new Schema(
     },
     bankIban: {
       type: String,
-      default: false,
+      default: "",
+    },
+    easypaisaAccount: {
+      type: String,
+      default: "",
     },
     isAdmin: {
       type: Boolean,
