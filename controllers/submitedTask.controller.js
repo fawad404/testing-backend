@@ -2,6 +2,7 @@ import submitedTaskModel from "../models/submitedTask.model.js";
 import taskModel from "../models/task.model.js";
 import createError from 'http-errors';
 
+let adminEmail = "fawadanxari31@gmail.com";
 
 export const postUpdatedTask = async (req, res, next) => {
 
@@ -11,6 +12,13 @@ export const postUpdatedTask = async (req, res, next) => {
   
     try {
       const savedUpdatedTask = await newUpdatedTask.save();
+      const email = adminEmail;  // Access the populated 'assignee' object
+      const subject = "Task submitted!";
+      const message = `
+      <h1>Task is submitted by the user</h1>
+      `;
+      // Send the email to the assignee
+      await sendEmail(email, subject, message);
       res.status(201).json(savedUpdatedTask);
     } catch (err) {
       next(err);
@@ -30,6 +38,14 @@ export const postUpdatedTask = async (req, res, next) => {
       if (!updatedTask) {
         return res.status(404).json({ message: "Task not found" });
       }
+
+      const email = adminEmail;  // Access the populated 'assignee' object
+      const subject = "Submitted Task is updated!";
+      const message = `
+      <h1>Submitted Task is updated!</h1>
+      `;
+      // Send the email to the assignee
+      await sendEmail(email, subject, message);
   
       res.status(200).json(updatedTask);
     } catch (err) {

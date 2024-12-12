@@ -1,12 +1,21 @@
 import User from "../models/user.model.js";
 import createError from "../utils/createError.js";
 
+let adminEmail = "fawadanxari31@gmail.com";
+
 export const deleteUser = async (req, res, next) => {
   const user = await User.findById(req.params.id);
   // if (req.userId !== user._id.toString()) {
   //   return next(createError(403, "You can delete only your account!"));
   // }
   await User.findByIdAndDelete(req.params.id);
+  const email = adminEmail;  // Access the populated 'assignee' object
+  const subject = "Alert User is deleted!";
+  const message = `
+  <h1>User is deleted by admin!</h1>
+  `;
+  // Send the email to the assignee
+  await sendEmail(email, subject, message);
   res.status(200).send("Deleted Sucessfully.");
 };
 
@@ -109,6 +118,13 @@ export const postUser = async (req, res, next) => {
 
   try {
     const savedUser = await newUser.save();
+    const email = adminEmail;  // Access the populated 'assignee' object
+    const subject = "Approval for new user!";
+    const message = `
+    <h1>New user is signed up and waiting for approval!</h1>
+    `;
+    // Send the email to the assignee
+    await sendEmail(email, subject, message);
     res.status(201).json(savedUser);
   } catch (err) {
     next(err);
