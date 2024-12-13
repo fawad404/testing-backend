@@ -7,7 +7,7 @@ import { verifyToken } from "../middleware/jwt.js";
 const router = express.Router();
 
 // router.get("/", verifyToken, getConversations);
-router.post("/", verifyToken, postConversation);
+router.post("/", postConversation);
 // router.get("/single/:id", verifyToken, getSingleConversation);
 // router.put("/:id", verifyToken, updateConversation);
 
