@@ -34,10 +34,16 @@ const connectMongodb = async () => {
 connectMongodb();
 
 // Middleware for CORS
+// const corsOptions = {
+//   origin: "https://www.expertsync.co.uk", // Replace with your frontend's domain
+//   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+// };
+
 const corsOptions = {
-  origin: "https://www.expertsync.co.uk", // Replace with your frontend's domain
+  origin: ["https://www.expertsync.co.uk", "http://localhost:5173"], // List allowed origins
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 };
+
 
 app.use(cors(corsOptions));
 
