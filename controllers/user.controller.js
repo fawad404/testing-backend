@@ -44,7 +44,7 @@ export const getUsers = async (req, res, next) => {
     const searchCriteria = searchQuery
       ? {
           $or: [
-            { name: { $regex: searchQuery, $options: 'i' } }, // Case-insensitive name search
+            { username: { $regex: searchQuery, $options: 'i' } }, // Case-insensitive name search
             { email: { $regex: searchQuery, $options: 'i' } }, // Case-insensitive email search
           ],
         }
