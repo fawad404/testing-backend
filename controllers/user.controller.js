@@ -82,7 +82,6 @@ export const getUsers = async (req, res, next) => {
   }
 };
 
-
 export const updateUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
@@ -93,11 +92,6 @@ export const updateUser = async (req, res, next) => {
       return next(createError(404, "User not found!"));
     }
 
-    // Check if the user has permissions to update the User
-    // if (req.user.id !== user.assignee.toString()) {
-    //   return next(createError(403, "You can update only your Users!"));
-    // }
-
     // Update the User with the provided details
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -105,11 +99,53 @@ export const updateUser = async (req, res, next) => {
       { new: true } // Return the updated document
     );
 
+    // Check if `isVerified` is part of the request body
+    if ('isVerified' in req.body) {
+      const email = adminEmail;  // Access the populated 'assignee' object
+      const subject = "Your Account is approved!";
+      const message = `
+      <h1>Your Account is approved!</h1>
+      `;
+      // Send the email to the assignee
+      await sendEmail(email, subject, message);
+      //console.log(`isVerified status updated to: ${req.body.isVerified}`);
+    }
+
     res.status(200).json(updatedUser);
   } catch (err) {
     next(err);
   }
 };
+
+
+
+// export const updateUser = async (req, res, next) => {
+//   try {
+//     const userId = req.params.id;
+
+//     // Find the User to ensure it exists
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return next(createError(404, "User not found!"));
+//     }
+
+//     // Check if the user has permissions to update the User
+//     // if (req.user.id !== user.assignee.toString()) {
+//     //   return next(createError(403, "You can update only your Users!"));
+//     // }
+
+//     // Update the User with the provided details
+//     const updatedUser = await User.findByIdAndUpdate(
+//       userId,
+//       { $set: req.body }, // Update fields based on request body
+//       { new: true } // Return the updated document
+//     );
+
+//     res.status(200).json(updatedUser);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const postUser = async (req, res, next) => {
   const newUser = new User({
