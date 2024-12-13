@@ -101,14 +101,26 @@ export const updateUser = async (req, res, next) => {
 
     // Check if `isVerified` is part of the request body
     if ('isVerified' in req.body) {
-      const email = adminEmail;  // Access the populated 'assignee' object
-      const subject = "Your Account is approved!";
-      const message = `
-      <h1>Your Account is approved!</h1>
-      `;
-      // Send the email to the assignee
-      await sendEmail(email, subject, message);
-      //console.log(`isVerified status updated to: ${req.body.isVerified}`);
+      const email = user.email; // Assuming the user's email is stored in the user object
+      const subject = "Account Status Update";
+      
+      if (req.body.isVerified) {
+        // If the account is approved
+        const message = `
+          <h1>Your account has been approved!</h1>
+          <p>You can now access all features of the platform. Welcome aboard!</p>
+        `;
+        await sendEmail(email, subject, message); // Send the approval email
+      } else {
+        // If the account is not approved
+        const message = `
+          <h1>Your account has not been approved.</h1>
+          <p>Please contact support if you believe this is a mistake.</p>
+        `;
+        await sendEmail(email, subject, message); // Send the rejection email
+      }
+
+      console.log(`isVerified status updated to: ${req.body.isVerified}`);
     }
 
     res.status(200).json(updatedUser);
@@ -116,6 +128,7 @@ export const updateUser = async (req, res, next) => {
     next(err);
   }
 };
+
 
 
 
