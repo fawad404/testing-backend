@@ -1,60 +1,29 @@
-import createError from "../utils/createError.js";
-import Conversation from "../models/conversation.model.js";
+import { sendEmail } from "./emailUtilis.js";
 
-export const createConversation = async (req, res, next) => {
-  const newConversation = new Conversation({
-    id: req.isSeller ? req.userId + req.body.to : req.body.to + req.userId,
-    sellerId: req.isSeller ? req.userId : req.body.to,
-    buyerId: req.isSeller ? req.body.to : req.userId,
-    readBySeller: req.isSeller,
-    readByBuyer: !req.isSeller,
-  });
+let adminEmail = "fawadanxari31@gmail.com";
 
-  try {
-    const savedConversation = await newConversation.save();
-    res.status(201).send(savedConversation);
-  } catch (err) {
-    next(err);
+export const postConversation = async (req, res, next) => {
+  const { name, email, phone, message } = req.body; // Destructure incoming data
+
+  if (!name || !email || !phone || !message) {
+    return res.status(400).json({ error: "All fields are required." });
   }
-};
 
-export const updateConversation = async (req, res, next) => {
   try {
-    const updatedConversation = await Conversation.findOneAndUpdate(
-      { id: req.params.id },
-      {
-        $set: {
-          // readBySeller: true,
-          // readByBuyer: true,
-          ...(req.isSeller ? { readBySeller: true } : { readByBuyer: true }),
-        },
-      },
-      { new: true }
-    );
+    // Optionally send an email notification
+    const subject = "New Contact Form Submission";
+    const emailMessage = `
+      <h1>New message from ${name}</h1>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `;
+    await sendEmail(adminEmail, subject, emailMessage);
 
-    res.status(200).send(updatedConversation);
+    // Simulate saving task (adjust as per actual database logic)
+    const savedTask = { name, email, phone, message }; // Replace with DB save logic
+    res.status(201).json(savedTask);
   } catch (err) {
-    next(err);
-  }
-};
-
-export const getSingleConversation = async (req, res, next) => {
-  try {
-    const conversation = await Conversation.findOne({ id: req.params.id });
-    if (!conversation) return next(createError(404, "Conversation Not found!"));
-    res.status(200).send(conversation);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getConversations = async (req, res, next) => {
-  try {
-    const conversations = await Conversation.find(
-      req.isSeller ? { sellerId: req.userId } : { buyerId: req.userId }
-    ).sort({ updatedAt: -1 });
-    res.status(200).send(conversations);
-  } catch (err) {
-    next(err);
+    next(err); // Pass errors to the error handler
   }
 };
