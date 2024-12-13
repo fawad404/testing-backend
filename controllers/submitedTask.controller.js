@@ -1,6 +1,7 @@
 import submitedTaskModel from "../models/submitedTask.model.js";
 import taskModel from "../models/task.model.js";
 import createError from 'http-errors';
+import { sendEmail } from "./emailUtilis.js";
 
 let adminEmail = "fawadanxari31@gmail.com";
 

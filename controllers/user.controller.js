@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import createError from "../utils/createError.js";
+import { sendEmail } from "./emailUtilis.js";
 
 let adminEmail = "fawadanxari31@gmail.com";
 
