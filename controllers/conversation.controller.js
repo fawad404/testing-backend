@@ -1,6 +1,6 @@
 import { sendEmail } from "./emailUtilis.js";
 
-let adminEmail = "fawadanxari31@gmail.com";
+let adminEmail = "abdulqadeerbilalofficial@gmail.com";
 
 export const postConversation = async (req, res, next) => {
   const { name, email, phone, message } = req.body; // Destructure incoming data

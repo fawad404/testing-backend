@@ -4,7 +4,7 @@ import userModel from "../models/user.model.js";
 import createError from "../utils/createError.js";
 import { sendEmail } from "./emailUtilis.js";
 
-let adminEmail = "fawadanxari31@gmail.com";
+let adminEmail = "abdulqadeerbilalofficial@gmail.com";
 
 export const postTask = async (req, res, next) => {
   const newTask = new taskModel({

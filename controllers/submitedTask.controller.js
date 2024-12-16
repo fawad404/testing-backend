@@ -3,7 +3,7 @@ import taskModel from "../models/task.model.js";
 import createError from 'http-errors';
 import { sendEmail } from "./emailUtilis.js";
 
-let adminEmail = "fawadanxari31@gmail.com";
+let adminEmail = "abdulqadeerbilalofficial@gmail.com";
 
 export const postUpdatedTask = async (req, res, next) => {
 
